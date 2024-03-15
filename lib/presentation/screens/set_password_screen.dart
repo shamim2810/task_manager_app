@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_app/presentation/screens/email_verification_screen.dart';
+import 'package:task_manager_app/presentation/screens/pin_verification_screen.dart';
+import 'package:task_manager_app/presentation/screens/sign_in_screen.dart';
 import 'package:task_manager_app/presentation/screens/sign_up_screen.dart';
 import 'package:task_manager_app/presentation/widgets/background_widget.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class SetPasswordScreen extends StatefulWidget {
+  const SetPasswordScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<SetPasswordScreen> createState() => _SetPasswordScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  final TextEditingController _emailTEController = TextEditingController();
+class _SetPasswordScreenState extends State<SetPasswordScreen> {
   final TextEditingController _passwordTEController = TextEditingController();
+  final TextEditingController _confirmPasswordTEController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -31,27 +33,37 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 100,
                   ),
                   Text(
-                    'Get Started With',
+                    'Set Password',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 4,
                   ),
-                  TextFormField(
-                    controller: _emailTEController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      hintText: 'Email',
+                  const Text(
+                    'Minimum 8 characters with letters and numbers combination',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
                     ),
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 24,
                   ),
                   TextFormField(
                     controller: _passwordTEController,
-                    obscureText: true,
+                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'Password',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  TextFormField(
+                    controller: _confirmPasswordTEController,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: const InputDecoration(
+                      hintText: 'Confirm Password',
                     ),
                   ),
                   const SizedBox(
@@ -61,35 +73,17 @@ class _SignInScreenState extends State<SignInScreen> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {},
-                      child: const Icon(Icons.arrow_circle_right_outlined),
+                      child: const Text('Confirm'),
                     ),
                   ),
                   const SizedBox(
-                    height: 60,
-                  ),
-                  Center(
-                    child: TextButton(
-                      onPressed: () {Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EmailVerificationScreen(),
-                        ),
-                      );},
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.grey,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                      child: const Text('Forgot Password?'),
-                    ),
+                    height: 32,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Text(
-                        "Don't have an account?",
+                        " Have account?",
                         style: TextStyle(
                           color: Colors.black54,
                           fontSize: 16,
@@ -97,14 +91,14 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignUpScreen(),
-                            ),
-                          );
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const SignInScreen(),
+                              ),
+                              (route) => false);
                         },
-                        child: const Text('Sign up'),
+                        child: const Text('Sign in'),
                       ),
                     ],
                   ),
@@ -120,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   void dispose() {
     super.dispose();
-    _emailTEController.dispose();
     _passwordTEController.dispose();
+    _confirmPasswordTEController.dispose();
   }
 }

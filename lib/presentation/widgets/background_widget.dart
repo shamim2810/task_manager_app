@@ -12,15 +12,16 @@ class BackgroundWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      SvgPicture.asset(
-        AssetsPath.backgroundSvg,
-        height: double.infinity,
-        width: double.infinity,
-        fit: BoxFit.cover,
-      ),
-      child
-    ],
+    return Stack(
+      children: [
+        SvgPicture.asset(
+          AssetsPath.backgroundSvg,
+          height: double.infinity,
+          width: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        SafeArea(child: child),
+      ],
     );
   }
 }
