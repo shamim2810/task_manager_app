@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:task_manager_app/presentation/screens/splash_screen.dart';
 import 'package:task_manager_app/presentation/utilis/app_colors.dart';
 
-class TaskManager extends StatelessWidget {
+class TaskManager extends StatefulWidget {
   const TaskManager({super.key});
 
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  State<TaskManager> createState() => _TaskManagerState();
+}
+
+class _TaskManagerState extends State<TaskManager> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: TaskManager.navigatorKey,
       title: 'Task Manager',
-      home: SplashScreen(),
+      home: const SplashScreen(),
       theme: ThemeData(
         inputDecorationTheme: InputDecorationTheme(
             fillColor: Colors.white,
@@ -45,6 +53,11 @@ class TaskManager extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
+        chipTheme: ChipThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50),
+          )
+        )
       ),
     );
   }
