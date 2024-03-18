@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/models/login_response.dart';
 import 'package:task_manager_app/data/models/response_object.dart';
 import 'package:task_manager_app/data/services/network_caller.dart';
 import 'package:task_manager_app/data/utility/urls.dart';
+import 'package:task_manager_app/presentation/controllers/auth_controller.dart';
 import 'package:task_manager_app/presentation/screens/auth/email_verification_screen.dart';
 import 'package:task_manager_app/presentation/screens/auth/sign_up_screen.dart';
 import 'package:task_manager_app/presentation/screens/main_bottom_nav_screen.dart';
@@ -162,13 +164,22 @@ class _SignInScreenState extends State<SignInScreen> {
       if(!mounted){
         return;
       }
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-            const MainBottomNavScreen(),
-          ),
-              (route) => false);
+
+      LoginResponse loginResponse = LoginResponse.fromJson(response.responseBody);
+      
+      /// Save the data to local cache
+      await AuthController.saveUserData(loginResponse.userData!);
+      await AuthController.saveUserToken(loginResponse.token!);
+
+      if(mounted) {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+              const MainBottomNavScreen(),
+            ),
+                (route) => false);
+      }
     }else{
       if(mounted){
         showSnackBarMessage(context, response.errorMessage ?? 'Login failed Try again');
