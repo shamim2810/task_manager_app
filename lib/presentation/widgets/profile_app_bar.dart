@@ -1,6 +1,3 @@
-import 'dart:js';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/app.dart';
 import 'package:task_manager_app/presentation/screens/auth/sign_in_screen.dart';
