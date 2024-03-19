@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/services/network_caller.dart';
+import 'package:task_manager_app/data/utility/urls.dart';
 import 'package:task_manager_app/presentation/widgets/background_widget.dart';
 import 'package:task_manager_app/presentation/widgets/profile_app_bar.dart';
+import 'package:task_manager_app/presentation/widgets/snack_bar_message.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
@@ -11,8 +14,11 @@ class AddNewTaskScreen extends StatefulWidget {
 
 class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   final TextEditingController _titleTEController = TextEditingController();
-  final TextEditingController _descriptionTEController = TextEditingController();
+  final TextEditingController _descriptionTEController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _addNewTaskInProgress = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,18 +32,28 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 48,),
-                  Text('Add new Task', style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 24,
-                  ),),
+                  const SizedBox(
+                    height: 48,
+                  ),
+                  Text(
+                    'Add new Task',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontSize: 24,
+                        ),
+                  ),
                   const SizedBox(
                     height: 16,
                   ),
                   TextFormField(
                     controller: _titleTEController,
                     decoration: const InputDecoration(
-                      hintText: 'Title'
+                      hintText: 'Title',
                     ),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Enter your Title';
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 8,
@@ -46,17 +62,33 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
                     controller: _descriptionTEController,
                     maxLines: 6,
                     decoration: const InputDecoration(
-                        hintText: 'Description'
+                      hintText: 'Description',
                     ),
+                    validator: (String? value) {
+                      if (value?.trim().isEmpty ?? true) {
+                        return 'Enter your Description';
+                      }
+                    },
                   ),
                   const SizedBox(
                     height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(onPressed: (){
-                      Navigator.pop(context);
-                    }, child: const Icon(Icons.arrow_circle_right_outlined),),
+                    child: Visibility(
+                      visible: _addNewTaskInProgress == false,
+                      replacement: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _addNewTask();
+                          }
+                        },
+                        child: const Icon(Icons.arrow_circle_right_outlined),
+                      ),
+                    ),
                   )
                 ],
               ),
@@ -66,6 +98,34 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       ),
     );
   }
+
+  Future<void> _addNewTask() async {
+    _addNewTaskInProgress = true;
+    setState(() {});
+
+    Map<String, dynamic> inputParams = {
+      "title": _titleTEController.text.trim(),
+      "description": _descriptionTEController.text.trim(),
+      "status":"New"
+    };
+    final response = await NetworkCaller.postRequest(Urls.createTask, inputParams);
+
+    _addNewTaskInProgress = false;
+    setState(() {});
+
+    if(response.isSuccess){
+      _titleTEController.clear();
+      _descriptionTEController.clear();
+      if(mounted){
+        showSnackBarMessage(context, 'New task has been added');
+      }
+    }else{
+      if(mounted){
+        showSnackBarMessage(context, response.errorMessage ?? 'Add new task failed!', true);
+      }
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -73,4 +133,3 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     _descriptionTEController.dispose();
   }
 }
-
