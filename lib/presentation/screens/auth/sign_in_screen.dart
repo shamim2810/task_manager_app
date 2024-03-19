@@ -153,36 +153,39 @@ class _SignInScreenState extends State<SignInScreen> {
     _isLoginInProgress = true;
     setState(() {});
     Map<String, dynamic> inputParams = {
-      'email' : _emailTEController.text.trim(),
-      'password' : _passwordTEController.text,
+      'email': _emailTEController.text.trim(),
+      'password': _passwordTEController.text,
     };
-    final ResponseObject response = await NetworkCaller.postRequest(Urls.login, inputParams);
+    final ResponseObject response = await NetworkCaller.postRequest(
+        Urls.login, inputParams,
+        fromSignIn: true);
     _isLoginInProgress = false;
     setState(() {});
 
-    if(response.isSuccess){
-      if(!mounted){
+    if (response.isSuccess) {
+      if (!mounted) {
         return;
       }
 
-      LoginResponse loginResponse = LoginResponse.fromJson(response.responseBody);
-      
+      LoginResponse loginResponse =
+          LoginResponse.fromJson(response.responseBody);
+
       /// Save the data to local cache
       await AuthController.saveUserData(loginResponse.userData!);
       await AuthController.saveUserToken(loginResponse.token!);
 
-      if(mounted) {
+      if (mounted) {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-              const MainBottomNavScreen(),
+              builder: (context) => const MainBottomNavScreen(),
             ),
-                (route) => false);
+            (route) => false);
       }
-    }else{
-      if(mounted){
-        showSnackBarMessage(context, response.errorMessage ?? 'Login failed Try again');
+    } else {
+      if (mounted) {
+        showSnackBarMessage(
+            context, response.errorMessage ?? 'Login failed Try again');
       }
     }
   }
