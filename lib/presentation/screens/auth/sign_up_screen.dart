@@ -93,7 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   TextFormField(
                     controller: _mobileTEController,
-                    keyboardType: TextInputType.emailAddress,
+                    keyboardType: TextInputType.phone,
                     decoration: const InputDecoration(
                       hintText: 'Mobile',
                     ),
@@ -103,6 +103,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
+                    maxLines: 11,
                   ),
                   const SizedBox(
                     height: 8,

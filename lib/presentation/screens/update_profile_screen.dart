@@ -36,8 +36,8 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   Text(
                     'Update Profile',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontSize: 24,
-                        ),
+                      fontSize: 24,
+                    ),
                   ),
                   const SizedBox(
                     height: 16,

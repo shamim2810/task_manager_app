@@ -25,7 +25,7 @@ class UserData {
     return data;
   }
 
-  String get fullName{
+  String get fullName {
     return '${firstName ?? ''} ${lastName ?? ''}';
   }
 }

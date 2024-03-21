@@ -20,7 +20,9 @@ PreferredSizeWidget get profileAppBar {
       },
       child: Row(
         children: [
-          const CircleAvatar(),
+          CircleAvatar(
+
+          ),
           const SizedBox(
             width: 12,
           ),
