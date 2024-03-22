@@ -61,7 +61,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   TextFormField(
                     controller: _firstTEController,
-                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'First Name',
                     ),
@@ -77,7 +76,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   TextFormField(
                     controller: _lastTEController,
-                    keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(
                       hintText: 'Last Name',
                     ),
@@ -103,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                       return null;
                     },
-                    maxLines: 11,
+                    maxLength: 11,
                   ),
                   const SizedBox(
                     height: 8,
@@ -126,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   SizedBox(
                     width: double.infinity,

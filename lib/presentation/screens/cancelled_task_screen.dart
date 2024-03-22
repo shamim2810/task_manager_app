@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/data/models/task_list_wrapper.dart';
+import 'package:task_manager_app/data/services/network_caller.dart';
+import 'package:task_manager_app/data/utility/urls.dart';
 import 'package:task_manager_app/presentation/widgets/background_widget.dart';
 import 'package:task_manager_app/presentation/widgets/profile_app_bar.dart';
+import 'package:task_manager_app/presentation/widgets/snack_bar_message.dart';
 import 'package:task_manager_app/presentation/widgets/task_card.dart';
 
 class CancelledTaskScreen extends StatefulWidget {
@@ -11,18 +15,53 @@ class CancelledTaskScreen extends StatefulWidget {
 }
 
 class _CancelledTaskScreenState extends State<CancelledTaskScreen> {
+
+  bool _getAllCancelledTaskListInProgress = false;
+  TaskListWrapper _cancelledTaskListWrapper = TaskListWrapper();
+
+  @override
+  void initState() {
+    super.initState();
+    _getAllCancelledTaskList();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: profileAppBar,
       body: BackgroundWidget(
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            //return const TaskCard();
-          },
+        child: Visibility(
+          visible: _getAllCancelledTaskListInProgress == false,
+          replacement: const Center(
+            child: CircularProgressIndicator(),
+          ),
+          child: ListView.builder(
+            itemCount: _cancelledTaskListWrapper.taskList?.length ?? 0,
+            itemBuilder: (context, index) {
+              return TaskCard(taskItem: _cancelledTaskListWrapper.taskList![index], refreshList: () {
+                _getAllCancelledTaskList();
+              },);
+            },
+          ),
         ),
       ),
     );
+  }
+  Future<void> _getAllCancelledTaskList() async {
+    _getAllCancelledTaskListInProgress = true;
+    setState(() {});
+    final response = await NetworkCaller.getRequest(Urls.cancelledTaskList);
+    if (response.isSuccess) {
+      _cancelledTaskListWrapper =
+          TaskListWrapper.fromJson(response.responseBody);
+      _getAllCancelledTaskListInProgress = false;
+      setState(() {});
+    } else {
+      _getAllCancelledTaskListInProgress = false;
+      setState(() {});
+      if (mounted) {
+        showSnackBarMessage(context,
+            response.errorMessage ?? 'Get Cancelled list has been failed');
+      }
+    }
   }
 }
