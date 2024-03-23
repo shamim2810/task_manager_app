@@ -23,8 +23,12 @@ PreferredSizeWidget get profileAppBar {
       child: Row(
         children: [
           CircleAvatar(
-            // backgroundImage: MemoryImage(base64Decode(AuthController.userData!.photo!)),
-          ),
+              backgroundImage: (AuthController.userData!.photo ?? null) != null
+                  ? MemoryImage(base64Decode(AuthController.userData!.photo!
+                  .split('data:image/png;base64,')
+                  .last))
+                  : null,
+              ),
           const SizedBox(
             width: 12,
           ),

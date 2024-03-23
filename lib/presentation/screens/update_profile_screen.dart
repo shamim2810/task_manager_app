@@ -69,7 +69,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                   ),
                   TextFormField(
                     enabled: false,
-                    controller: _mobileTEController,
+                    controller: _emailTEController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: const InputDecoration(hintText: 'Email'),
                   ),
@@ -81,7 +81,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     decoration: const InputDecoration(hintText: 'First Name'),
                     validator: (String? value) {
                       if (value?.trim().isEmpty ?? true) {
-                        return 'Enter your irst Name';
+                        return 'Enter your First Name';
                       }
                       return null;
                     },
